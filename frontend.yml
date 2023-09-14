@@ -1,7 +1,7 @@
 - name: Fronted setup
   host: all
   become: yes
-  tasks: Install Nginx
+  tasks:
     - name: Installing Nginx
       ansible.builtin.dnf:
         name: nginx
