@@ -1,0 +1,67 @@
+- name: backend setup
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Nodejs Repos
+      ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+
+    - name: Install Nodejs
+      ansible.builtin.dnf:
+        name: nodejs
+
+    - name: Copy Backend Service File
+      ansible.builtin.copy:
+        src: backend.service
+        dest: /etc/systemd/system/backend.service
+
+    - name: Add Application User
+      ansible.builtin.user:
+        name: expense
+
+    - name: Remove old contend
+      ansible.builtin.file:
+        path: /app
+        state: absent
+    - name: Create App Directory
+      ansible.builtin.file:
+        path: /app
+        state: directory
+    - name: Download backend Code and Extract
+      ansible.builtin.unarchive:
+        src: https://expense-artifacts.s3.amazonaws.com/backend.zip
+        dest: /app
+        remote_src: yes
+    - name: Install Nodejs dependencies
+      ansible.builtin.shell: install npm
+      args:
+        chdir: /app
+    - name: Install MySql Client
+      ansible.builtin.dnf:
+        name: mysql
+    - name: Load Schema
+      ansible.builtin.shell: mysql.snehithdops.online -uroot -pExpenseApp@1
+
+    - name: Start and enable Nginx Service
+      ansible.builtin.systemd:
+        name: backend
+        state: restarted
+        enabled: yes
+        daemon-reload: yes
+
+
+
+
+
+
+
+echo Start Backend Service
+systemctl daemon-reload &>>$log_file
+systemctl enable backend &>>$log_file
+systemctl restart backend &>>$log_file
+stat_check
+
+
+echo Load Schema
+mysql_root_password=$1
+mysql -h mysql.snehithdops.online -uroot -p$mysql_root_password < /app/schema/backend.sql &>>$log_file
+stat_check
