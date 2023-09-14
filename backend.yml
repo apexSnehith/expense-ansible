@@ -39,7 +39,7 @@
       ansible.builtin.dnf:
         name: mysql
     - name: Load Schema
-      ansible.builtin.shell: mysql.snehithdops.online -uroot -pExpenseApp@1 /app/schema/backend.sql
+      ansible.builtin.shell: mysql -h mysql.snehithdops.online -uroot -pExpenseApp@1 < /app/schema/backend.sql
 
     - name: Start and enable Nginx Service
       ansible.builtin.systemd:
