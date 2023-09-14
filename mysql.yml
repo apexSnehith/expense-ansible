@@ -16,7 +16,7 @@
       ansible.builtin.systemd:
         name: mysqld
         state: restarted
-        enable: yes
+        enabled: yes
     - name: Set Root password
       ansible.builtin.shell: mysql_secure_installation --set-root-pass ExpenseApp@1
 
