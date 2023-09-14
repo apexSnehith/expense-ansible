@@ -32,7 +32,7 @@
         dest: /app
         remote_src: yes
     - name: Install Nodejs dependencies
-      ansible.builtin.shell: install npm
+      ansible.builtin.shell: npm install
       args:
         chdir: /app
     - name: Install MySql Client
