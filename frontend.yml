@@ -14,13 +14,18 @@
 
     - name: Removing Old Nginx Content
       ansible.builtin.file:
-        path: /usr/share/nginx/html/
+        path: /usr/share/nginx/html
         state: absent
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /usr/share/nginx/html
+        state: directory
 
     - name: Download Frontend Code and Extract
       ansible.builtin.unarchive:
         src: https://expense-artifacts.s3.amazonaws.com/frontend.zip
-        dest: /usr/share/nginx/html/
+        dest: /usr/share/nginx/html
         remote_src: yes
 
     - name: Start and enable Nginx Service
