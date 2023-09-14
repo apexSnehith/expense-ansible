@@ -1,5 +1,5 @@
 - name: Fronted setup
-  host: all
+  hosts: all
   become: yes
   tasks:
     - name: Installing Nginx
