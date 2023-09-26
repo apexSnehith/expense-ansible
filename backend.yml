@@ -22,22 +22,27 @@
       ansible.builtin.file:
         path: /app
         state: absent
+
     - name: Create App Directory
       ansible.builtin.file:
         path: /app
         state: directory
+
     - name: Download backend Code and Extract
       ansible.builtin.unarchive:
         src: https://expense-artifacts.s3.amazonaws.com/backend.zip
         dest: /app
         remote_src: yes
+
     - name: Install Nodejs dependencies
       ansible.builtin.shell: npm install
       args:
         chdir: /app
+
     - name: Install MySql Client
       ansible.builtin.dnf:
         name: mysql
+
     - name: Load Schema
       ansible.builtin.shell: mysql -h mysql.snehithdops.online -uroot -pExpenseApp@1 < /app/schema/backend.sql
 
